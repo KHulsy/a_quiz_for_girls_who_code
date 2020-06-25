@@ -3,3 +3,5 @@ In retrospect, I created a very pink female empowerment page wherein TSwizzle tr
 I spent forty-five hours on this assignment. That is not a fabrication in any capacity. I wanted girls to have a cool place to take quizzes. On a personal note, somebody just told me one day that I was bad at math, and I bought it. I'm not alone. We need more girls in math and science. More importantly, I need to be a conduit to girls gravitating toward math and science. I did the sticky footer. That's cool, right? 
 Programs Used: Wix, CodeHound, GitHub, Visual Studio Plus, internal screaming.
 Acknowledgments: Daniel. 
+Link to Screenshot Below:
+https://ucbberfsfft06-gjw7987.slack.com/files/U015E0G9JFJ/F016D82CK9P/img_0824.jpg
