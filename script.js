@@ -1,23 +1,155 @@
-<!DOCTYPE html>
-<html>
-<body>
-<p id="demo"></p>
-<script>
+(function(){
+  // Functions
+  function buildQuiz(){
+    // variable to store the HTML output
+    const output = [];
 
-var questions =[1, 2, 3]              
-questions[0]
-var question= {question}: "What percentage of high school girls wanted to major in computer science in 2019?";
-choices: ["javascript quiz"],["all the ladies"],["c is for cookie"],["less than one percent"]
-answer: "less than one percent" ;
-var questions=[1, 2, 3] ;
-questions[1];
-var question= {question}: "What do the letters NaN stand for?";
-choices: ["a super sweet nine inch nails cover band"],["Nickelodeon Atom Nitty"],[Not a Number];
-answer: "Not a number" ;
-var questions=[1, 2, 3] ;
-questions[2];
-var question= {question}: "What is vanilla Javascript?" ;
-choices: ["It's my faavorite frappucino and I LOVE FALL"],["a super awesome screenwriting app"],["Javascript without the JQuery"];
-answer: "Javascript without the JQuery" ;
-</script>
-    body >
+    // for each question...
+    myQuestions.forEach(
+      (currentQuestion, questionNumber) => {
+
+        // variable to store the list of possible answers
+        const answers = [];
+
+        // and for each available answer...
+        for(letter in currentQuestion.answers){
+
+          // ...add an HTML radio button
+          answers.push(
+            `<label>
+              <input type="radio" name="question${questionNumber}" value="${letter}">
+              ${letter} :
+              ${currentQuestion.answers[letter]}
+            </label>`
+          );
+        }
+
+        // add this question and its answers to the output
+        output.push(
+          `<div class="slide">
+            <div class="question"> ${currentQuestion.question} </div>
+            <div class="answers"> ${answers.join("")} </div>
+          </div>`
+        );
+      }
+    );
+
+    // finally combine our output list into one string of HTML and put it on the page
+    quizContainer.innerHTML = output.join('');
+  }
+
+  function showResults(){
+
+    // gather answer containers from our quiz
+    const answerContainers = quizContainer.querySelectorAll('.answers');
+
+    // keep track of user's answers
+    let numCorrect = 0;
+
+    // for each question...
+    myQuestions.forEach( (currentQuestion, questionNumber) => {
+
+      // find selected answer
+      const answerContainer = answerContainers[questionNumber];
+      const selector = `input[name=question${questionNumber}]:checked`;
+      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+      // if answer is correct
+      if(userAnswer === currentQuestion.correctAnswer){
+        // add to the number of correct answers
+        numCorrect++;
+
+        // color the answers green
+        answerContainers[questionNumber].style.color = 'lightgreen';
+      }
+      // if answer is wrong or blank
+      else{
+        // color the answers red
+        answerContainers[questionNumber].style.color = 'red';
+      }
+    });
+
+    // show number of correct answers out of total
+    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+  }
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active-slide');
+    slides[n].classList.add('active-slide');
+    currentSlide = n;
+    if(currentSlide === 0){
+      previousButton.style.display = 'none';
+    }
+    else{
+      previousButton.style.display = 'inline-block';
+    }
+    if(currentSlide === slides.length-1){
+      nextButton.style.display = 'none';
+      submitButton.style.display = 'inline-block';
+    }
+    else{
+      nextButton.style.display = 'inline-block';
+      submitButton.style.display = 'none';
+    }
+  }
+
+  function showNextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  function showPreviousSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  // Variables
+  const quizContainer = document.getElementById('quiz');
+  const resultsContainer = document.getElementById('results');
+  const submitButton = document.getElementById('submit');
+  const myQuestions = [
+    {
+      question: "What is vanilla Javascript?",
+      answers: {
+        a: "a tasty treat",
+        b: "Sheryl Sandberg",
+        c: "A form of Javascript"
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "Name one job which doesn't have a wage discrepancy?",
+      answers: {
+        a: "underwater basket weaving",
+        b: "busking",
+        c: "web development"
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "What kind of text can make your text glow?",
+      answers: {
+        a: "Brotext",
+        b: "Whoatext",
+        c: "Potext",
+        d: "Glowtext"
+      },
+      correctAnswer: "d"
+    }
+  ];
+
+  // Kick things off
+  buildQuiz();
+
+  // Pagination
+  const previousButton = document.getElementById("previous");
+  const nextButton = document.getElementById("next");
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  // Show the first slide
+  showSlide(currentSlide);
+
+  // Event listeners
+  submitButton.addEventListener('click', showResults);
+  previousButton.addEventListener("click", showPreviousSlide);
+  nextButton.addEventListener("click", showNextSlide);
+})();
